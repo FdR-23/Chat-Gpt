@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html {
+  @apply w-full h-full scroll-smooth
+}
+
+body {
+  @apply max-w-screen-xl h-screen m-auto flex flex-col bg-[#f5f8fa] scroll-smooth
+}
+
+#root{
+  @apply min-h-screen box-border  
+}
