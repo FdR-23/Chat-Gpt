@@ -11,6 +11,25 @@ body {
   @apply max-w-screen-xl h-screen m-auto flex flex-col bg-[#f5f8fa] scroll-smooth
 }
 
-#root{
-  @apply min-h-screen box-border  
+#root {
+  @apply min-h-screen box-border
 }
+
+body::-webkit-scrollbar,
+form::-webkit-scrollbar,
+#scroll-chat::-webkit-scrollbar {
+  /* Establecer el ancho del scroll */
+  width: 8px;
+  height: 10px;
+
+  /* Establecer el color del scroll */
+  background-color: #f5f5f5;
+}
+
+body::-webkit-scrollbar-thumb,
+form::-webkit-scrollbar-thumb,
+#scroll-chat::-webkit-scrollbar-thumb {
+  /* Establecer el color del "pulgador" del scroll */
+  background-color: #888888;
+}
+

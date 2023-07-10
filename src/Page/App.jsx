@@ -1,22 +1,20 @@
-import axios from "axios";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useMessageContext, useValueParamsContext, useMessageSystemContext } from "../MeesageProvier"
 import Request from "../Services/Request";
+import Chat from "../components/Chat";
 
 function App() {
-  const [inputValue, setInputValue] = useState('');
+
   const { messages, setMessages } = useMessageContext();
   const { inputValueSystem, setInputValueSystem } = useMessageSystemContext();
   const { inputValueParams, setInputValueParams } = useValueParamsContext();
-
   const [isChatGPTWriting, setIsChatGPTWriting] = useState(false);
 
+
   const isUserMessage = messages && messages[messages.length - 1]?.role === "user"
-console.log(messages)
+
   useEffect(() => {
-    const controller = new AbortController();
     if (isUserMessage) {
-      console.log("entra")
       Request(messages, inputValueParams)
         .then((data) => {
           if (data?.choices.length > 1) {
@@ -39,14 +37,8 @@ console.log(messages)
 
 
 
-  //para el chat
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
 
-  // const handleFirstMessage = (e) => {
-  //   setInputValue(e.target.value);
-  // };
+
 
   // para parametros de chatgpt
   const handleInputRadioParams = (e) => {
@@ -63,16 +55,13 @@ console.log(messages)
   //enviamos el mensaje system con los parametros 
   const handleSubmitSystem = (e) => {
     e.preventDefault()
-    let textToSystem = `cuando te escriba 'generar' vas a generar un mensaje automaticamente con los siguientes parametros.
-    Tu tarea es  tomar el rol de ${inputValueSystem.rol}. 
-    Se requiere generar una comunicación vía ${inputValueSystem.channel}${['Instagram', 'Twitter', 'Facebook'].includes(inputValueSystem.channel) && inputValueSystem.countUser ? `,los mensajes orientados al brief de la cuenta' ${inputValueSystem.countUser}` : ''}, dirigida a una audiencia con las siguientes características: ${inputValueSystem.audience}, 
-    para ${inputValueSystem.typeComunication}, al o el evento ${inputValueSystem.eventName}, el mensaje tiene que tener un maximo de ${inputValueSystem.quantityWordOrCharacter} ${inputValueSystem.wordOrCharacter}. 
-    No explicitar en ningún momento a qué perfiles se está comunicando. 
-    Usar un tono y estilo ${inputValueSystem.toneAndStyle}, ${inputValueSystem.typeComunication === 'convocar' ? 'que el mensaje sea de marketing para captar el máximo de personas posibles.' : ''} 
-
-    Se desea comunicar lo siguiente: ${inputValueSystem.message}.
-
-    Al final vas a sugerir  con qué imagen se debería comunicar este mensaje.`
+    let textToSystem = `Cuando te escriba 'generar', asume el rol de ${inputValueSystem.rol} y genera automáticamente un mensaje con los siguientes parámetros. Tu tarea es comunicarte en nombre de ${inputValueSystem.rol}.
+    Se requiere generar una comunicación vía ${inputValueSystem.channel}${['Instagram', 'Twitter', 'Facebook'].includes(inputValueSystem.channel) && inputValueSystem.countUser ? `,orientada a los mensajes del brief de la cuenta' ${inputValueSystem.countUser}` : ''}, dirigida a una audiencia con las siguientes características: ${inputValueSystem.audience}. 
+    El objetivo es ${inputValueSystem.typeComunication}, relacionado con el evento ${inputValueSystem.eventName}. El mensaje debe contener un máximo de  ${inputValueSystem.quantityWordOrCharacter} ${inputValueSystem.wordOrCharacter}. 
+    En ningún momento se debe mencionar explícitamente a qué perfiles se está dirigiendo la comunicación. 
+    Como ${inputValueSystem.rol}, debes utilizar un tono y estilo ${inputValueSystem.toneAndStyle}, ${inputValueSystem.typeComunication === 'convocar' ? 'asegúrate que el mensaje sea de marketing para captar el máximo de personas posibles.' : ''}. 
+    El mensaje a comunicar es el siguiente: ${inputValueSystem.message}.
+`
 
     const newMessage = {
       role: 'system',
@@ -86,38 +75,16 @@ console.log(messages)
       content: 'generar',
     };
     setMessages((prevMessages) => [...prevMessages, newMessageUser]);
-
     setIsChatGPTWriting(true);
     window.scrollTo(0, 0)
   }
 
-  // Para chatear con chat gpt
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (inputValue.trim() !== '') {
-      const newMessage = {
-        role: 'user',
-        content: inputValue,
-      };
-      if (messages) {
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-      } else {
-        setMessages([newMessage]);
-      }
-      setInputValue('');
-      setIsChatGPTWriting(true);
-    }
-  };
 
-  const chatContainerRef = useRef(null);
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTo(0, chatContainerRef.current.scrollHeight);
-    }
-  }, [messages]);
+
+
 
   return (
-    <div className="w-full  flex flex-col items-center  ">
+    <div className="w-full h-full flex flex-col items-center ">
       {/* 
       <div className='w-full  bg-slate-400  rounded-b-md'>
         <div className='text-center m-2'>
@@ -126,17 +93,19 @@ console.log(messages)
       </div> */}
 
 
-      <div className="flex justify-between w-full h-full">
+      <div className="flex justify-between w-full h-full  ">
+
         {/* mensaje con principal del sistema*/}
 
-        <div className="flex flex-col w-[350px] h-full border shadow-sm shadow-black rounded-sm overflow-hidden  box-border">
+        <div className="flex flex-col w-[350px] h-full border shadow-sm shadow-black rounded-sm box-border 
+        ">
 
           <h3 className="px-4 py-2 font-semifbold border-b border-gray-900  bg-gray-200  font-bold">
             Promp para el sistema
           </h3>
 
           <form
-            className='flex flex-col '
+            className='flex flex-col overflow-y-auto  pr-2'
             onSubmit={handleSubmitSystem}>
 
             <label className='flex flex-col p-2'>
@@ -188,7 +157,7 @@ console.log(messages)
             </label>
             {['Instagram', 'Twitter', 'Facebook'].includes(inputValueSystem.channel) &&
               <label className='flex flex-col p-2'>
-                <h4 className='font-semibold font-sans'>Brief de la cuenta:</h4>
+                <h4 className='font-semibold font-sans'>Nombre de la cuenta:</h4>
                 <input
                   className="border border-gray-300 rounded-md p-2  w-full mr-1"
                   name='countUser'
@@ -334,63 +303,11 @@ console.log(messages)
           </form>
 
         </div>
-
-
         {/* mensaje con GPT */}
-        <div className="w-[700px] h-[600px] border-2 border-black rounded-xl overflow-hidden flex flex-col m-2 mr-10">
+        <Chat
+          isChatGPTWriting={isChatGPTWriting}
+          setIsChatGPTWriting={setIsChatGPTWriting} />
 
-          <h3 className="px-4 py-2 font-semifbold border-b border-gray-900  bg-gray-200  font-bold">
-            Chat con GPT
-          </h3>
-
-          <div className=" flex-grow overflow-auto p-2 bg-slate-50" ref={chatContainerRef}>
-            {messages && messages.map((message, index) => (
-              message.role === 'system' ? null : (
-                message.role === 'user' ? (
-                  message.content === 'generar' ? <></> :
-                    <div key={index} className="flex justify-start mb-4 mr-20">
-                      <div className="bg-blue-500 text-white rounded-lg p-2">
-                        <span className="text-[12px]  text-gray-900">Me</span>
-                        <p className="">{message.content}</p>
-                      </div>
-                    </div>) :
-                  <div key={index} className="flex justify-end mb-4 ml-20">
-                    <div className="bg-gray-400 text-white rounded-lg p-2 whitespace-pre-line">
-                      <span className="text-[12px]  text-gray-900">GPT</span>
-                      <p className="">{message.content}</p>
-                    </div>
-                  </div>
-              )
-            ))}
-
-            {messages && messages.length > 0 && messages[messages.length - 1].role === 'user' && isChatGPTWriting && (
-              <div className="flex justify-end mb-4">
-                <div className="bg-gray-400 text-white rounded-lg p-2">
-                  <span className="text-[12px]  text-gray-900">GPT</span>
-                  <p className="">Escribiendo ...</p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <form
-            className='flex p-2 py-4 bg-slate-800 '
-            onSubmit={handleSubmit}>
-            <input
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              className="border border-gray-300 rounded-md p-2 mt-2 w-full mr-1"
-              placeholder="Escribe un mensaje..."
-            />
-            <button
-              type="submit"
-              className="bg-blue-500 text-white rounded-md px-4 py-2 mt-2"
-            >
-              Enviar
-            </button>
-          </form>
-        </div>
       </div>
 
 
