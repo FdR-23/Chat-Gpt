@@ -4,7 +4,6 @@ import App from './Page/App.jsx'
 import './index.css'
 import MessageProvider from './MeesageProvier.jsx'
 
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
   <MessageProvider>

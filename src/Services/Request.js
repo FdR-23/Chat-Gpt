@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const Request = async (messages, inputValueParams) => {
-console.log(messages)
+    console.log(import.meta.env.VITE_OPENAI_API_KEY_MAX_NEW)
     try {
         const params = {
             messages: messages,
