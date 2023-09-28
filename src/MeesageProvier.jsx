@@ -1,20 +1,7 @@
-import React, { useState, useContext } from 'react'
-
-export const messageContext = React.createContext();
-export const useMessageContext = () => {
-    return useContext(messageContext)
-}
-
-export const messageSystemContext = React.createContext();
-export const useMessageSystemContext = () => {
-    return useContext(messageSystemContext)
-}
-
-export const valueParamsContext = React.createContext();
-export const useValueParamsContext = () => {
-    return useContext(valueParamsContext)
-}
-
+import  { useState } from 'react'
+import { messageContext } from './hooks/useMessageContext';
+import { messageSystemContext } from './hooks/useMessageSystemContext';
+import { valueParamsContext } from './hooks/useValueParamsContext';
 
 const MessageProvider = ({ children }) => {
     const [inputValueParams, setInputValueParams] = useState({

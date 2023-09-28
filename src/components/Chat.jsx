@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useMessageContext } from '../MeesageProvier';
+import  { useState, useEffect, useRef } from 'react'
+import { useMessageContext } from '../hooks/useMessageContext';
+
 
 const Chat = ({ isChatGPTWriting, setIsChatGPTWriting }) => {
     const [inputValue, setInputValue] = useState('');
 
 
     const chatContainerRef = useRef(null);
+
     const { messages, setMessages } = useMessageContext();
 
     useEffect(() => {
@@ -27,6 +29,7 @@ const Chat = ({ isChatGPTWriting, setIsChatGPTWriting }) => {
                 role: 'user',
                 content: inputValue,
             };
+            console.log("messages",messages)
             if (messages) {
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             } else {
@@ -79,7 +82,7 @@ const Chat = ({ isChatGPTWriting, setIsChatGPTWriting }) => {
                 </div>
 
                 <form
-                    className={`${Boolean(!messages) ? 'hidden' : 'flex'} p-3 rounded-t-sm bg-slate-300 `}
+                    className={`${!messages ? 'hidden' : 'flex'} p-3 rounded-t-sm bg-slate-300 `}
                     onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -90,7 +93,7 @@ const Chat = ({ isChatGPTWriting, setIsChatGPTWriting }) => {
                     />
                     <button
                         type="submit"
-                        className="bg-blue-500 text-white rounded-md px-4 py-2 mt-2"
+                        className="bg-blue-900 text-white rounded-md px-4 py-2 mt-2"
                     >
                         Enviar
                     </button>

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useMessageContext, useValueParamsContext, useMessageSystemContext } from "../MeesageProvier"
+import { useMessageContext } from "../hooks/useMessageContext";
+import { useValueParamsContext } from "../hooks/useValueParamsContext";
+import { useMessageSystemContext } from "../hooks/useMessageSystemContext";
 import Request from "../Services/Request";
 import Chat from "../components/Chat";
-
 function App() {
 
   const { messages, setMessages } = useMessageContext();
@@ -17,21 +18,23 @@ function App() {
     if (isUserMessage) {
       Request(messages, inputValueParams)
         .then((data) => {
-          if (data?.choices.length > 1) {
+  console.log(data.response)
+          if(data.response?.status === 401){
             setMessages((prevMessage) => {
-              const newMessages = data?.choices.map((choice) => {
-                let chatGptMessage = choice.message.content.trim();
-                return { role: "assistant", content: chatGptMessage, }
-              })
-              return [...prevMessage, ...newMessages]
+            const newMessage = {
+              role: 'assistant',
+              content: data.response.data.error.message }
+            return [...prevMessage, newMessage]});
+          }else{
+         
+          setMessages((prevMessage) => {
+            const newMessages = data?.choices.map((choice) => {
+              let chatGptMessage = choice.message.content.trim();
+              return { role: "assistant", content: chatGptMessage, }
             })
-          } else {
-            setMessages((prevMessage) => {
-              let chatGptMessage = data?.choices[0].message.content.trim();
-              return [...prevMessage, { role: "assistant", content: chatGptMessage, }]
-            })
-          }
-        });
+            return [...prevMessage, ...newMessages]
+          })}
+        })
     }
   }, [isUserMessage])
 
@@ -79,7 +82,7 @@ function App() {
     window.scrollTo(0, 0)
   }
 
-
+  console.log(messages)
 
 
 
@@ -116,8 +119,7 @@ function App() {
                 defaultValue={inputValueSystem.rol}
                 onChange={handleInputChangeSystem}>
                 <option value='' >--Choose and option--</option>
-                <option value="Horacio Rodriguez Larreta">Horacio Rodriguez Larreta</option>
-                <option value="Jefe de Comunicacón de Gobierno de la Ciudad de Buenos Aires">Jefe de equipo de comunicacón</option>
+                <option value="Federico Daniel Rampi">Federico Daniel Rampi</option>
               </select>
             </label>
 
@@ -164,7 +166,7 @@ function App() {
                   value={inputValueSystem.countUser}
                   onChange={handleInputChangeSystem}
                   type="text"
-                  placeholder="Ejemplo @horaciorlarreta"
+                
                 />
               </label>
             }
@@ -234,7 +236,7 @@ function App() {
             </label>
 
             <label className='flex flex-col p-2'>
-              <h4 className='font-semibold font-sans'>Alternativas de respuestas:</h4>
+              <h4 className='font-semibold font-sans'>Cantidad de respuestas:</h4>
               <div className='flex flex-row justify-around m-2'>
                 <label className='flex flex-row'>
                   <span className='font-bold text-lg'>1</span>
