@@ -18,22 +18,25 @@ function App() {
     if (isUserMessage) {
       Request(messages, inputValueParams)
         .then((data) => {
-  console.log(data.response)
-          if(data.response?.status === 401){
+          console.log(data.response)
+          if (data.response?.status === 401) {
             setMessages((prevMessage) => {
-            const newMessage = {
-              role: 'assistant',
-              content: data.response.data.error.message }
-            return [...prevMessage, newMessage]});
-          }else{
-         
-          setMessages((prevMessage) => {
-            const newMessages = data?.choices.map((choice) => {
-              let chatGptMessage = choice.message.content.trim();
-              return { role: "assistant", content: chatGptMessage, }
+              const newMessage = {
+                role: 'assistant',
+                content: data.response.data.error.message
+              }
+              return [...prevMessage, newMessage]
+            });
+          } else {
+
+            setMessages((prevMessage) => {
+              const newMessages = data?.choices.map((choice) => {
+                let chatGptMessage = choice.message.content.trim();
+                return { role: "assistant", content: chatGptMessage, }
+              })
+              return [...prevMessage, ...newMessages]
             })
-            return [...prevMessage, ...newMessages]
-          })}
+          }
         })
     }
   }, [isUserMessage])
@@ -82,7 +85,7 @@ function App() {
     window.scrollTo(0, 0)
   }
 
-  console.log(messages)
+  //console.log(messages)
 
 
 
@@ -113,14 +116,23 @@ function App() {
 
             <label className='flex flex-col p-2'>
               <h4 className='font-semibold font-sans'>Rol:</h4>
-              <select
+              {/* <select
                 className="border border-gray-300 rounded-md p-2 w-full mr-1"
                 name="rol"
                 defaultValue={inputValueSystem.rol}
                 onChange={handleInputChangeSystem}>
                 <option value='' >--Choose and option--</option>
                 <option value="Federico Daniel Rampi">Federico Daniel Rampi</option>
-              </select>
+              </select> */}
+              
+              <input
+                className="border border-gray-300 rounded-md p-2  w-full mr-1"
+                name='rol'
+                value={inputValueSystem.rol}
+                onChange={handleInputChangeSystem}
+                type="text"
+                placeholder="Escribe tu nombre..."
+              />
             </label>
 
 
@@ -154,7 +166,7 @@ function App() {
                 <option value="Whatsapp">Whatsapp</option>
                 <option value="Facebook">Facebook</option>
                 <option value="E-mail">E-mail</option>
-                <option value="IVR">IVR</option>
+                {/* <option value="IVR">IVR</option> */}
               </select>
             </label>
             {['Instagram', 'Twitter', 'Facebook'].includes(inputValueSystem.channel) &&
@@ -166,7 +178,7 @@ function App() {
                   value={inputValueSystem.countUser}
                   onChange={handleInputChangeSystem}
                   type="text"
-                
+
                 />
               </label>
             }

@@ -9,7 +9,7 @@ const MessageProvider = ({ children }) => {
         quantityAnswer: 1,
     });
     const [inputValueSystem, setInputValueSystem] = useState({
-        rol: 'Default',
+        rol: '',
         typeComunication: 'Default',
         audience: '',
         channel: '',
