@@ -11,14 +11,12 @@ function App() {
   const { inputValueParams, setInputValueParams } = useValueParamsContext();
   const [isChatGPTWriting, setIsChatGPTWriting] = useState(false);
 
-
   const isUserMessage = messages && messages[messages.length - 1]?.role === "user"
 
   useEffect(() => {
     if (isUserMessage) {
       Request(messages, inputValueParams)
         .then((data) => {
-          console.log(data.response)
           if (data.response?.status === 401) {
             setMessages((prevMessage) => {
               const newMessage = {
@@ -28,7 +26,6 @@ function App() {
               return [...prevMessage, newMessage]
             });
           } else {
-
             setMessages((prevMessage) => {
               const newMessages = data?.choices.map((choice) => {
                 let chatGptMessage = choice.message.content.trim();
@@ -40,11 +37,6 @@ function App() {
         })
     }
   }, [isUserMessage])
-
-
-
-
-
 
   // para parametros de chatgpt
   const handleInputRadioParams = (e) => {
@@ -66,8 +58,7 @@ function App() {
     El objetivo es ${inputValueSystem.typeComunication}, relacionado con el evento ${inputValueSystem.eventName}. El mensaje debe contener un máximo de  ${inputValueSystem.quantityWordOrCharacter} ${inputValueSystem.wordOrCharacter}. 
     En ningún momento se debe mencionar explícitamente a qué perfiles se está dirigiendo la comunicación. 
     Como ${inputValueSystem.rol}, debes utilizar un tono y estilo ${inputValueSystem.toneAndStyle}, ${inputValueSystem.typeComunication === 'convocar' ? 'asegúrate que el mensaje sea de marketing para captar el máximo de personas posibles.' : ''}. 
-    El mensaje a comunicar es el siguiente: ${inputValueSystem.message}.
-`
+    El mensaje a comunicar es el siguiente: ${inputValueSystem.message}.`
 
     const newMessage = {
       role: 'system',
@@ -75,7 +66,7 @@ function App() {
     };
     setMessages([newMessage]);
 
-    //mensaje para que genere
+    //Mensaje para que genere
     const newMessageUser = {
       role: 'user',
       content: 'generar',
@@ -85,48 +76,27 @@ function App() {
     window.scrollTo(0, 0)
   }
 
-  //console.log(messages)
-
-
 
   return (
-    <div className="w-full h-full flex flex-col items-center ">
-      {/* 
-      <div className='w-full  bg-slate-400  rounded-b-md'>
-        <div className='text-center m-2'>
-          <h2 className='text-4xl font-mono font-bold'>Chat </h2>
-        </div>
-      </div> */}
+    <div className="flex flex-col items-center w-full h-screen p-2 pb-0 overflow-hidden bg-gray-100">
 
-
-      <div className="flex justify-between w-full h-full  ">
+      <div className="flex justify-between w-full h-full overflow-hidden border-black rounded-sm shadow-md border-x shadow-black">
 
         {/* mensaje con principal del sistema*/}
 
-        <div className="flex flex-col w-[350px] h-full border shadow-sm shadow-black rounded-sm box-border 
-        ">
-
-          <h3 className="px-4 py-2 font-semifbold border-b border-gray-900  bg-gray-200  font-bold">
+        <div className="flex flex-col w-[350px]  rounded-sm box-border bg-indigo-300/80">
+          <h3 className="px-4 py-2 text-lg font-bold tracking-wide text-center text-white bg-gray-700 ">
             Promp para el sistema
           </h3>
 
           <form
-            className='flex flex-col overflow-y-auto  pr-2'
+            className='flex flex-col pr-2 overflow-y-auto'
             onSubmit={handleSubmitSystem}>
 
             <label className='flex flex-col p-2'>
-              <h4 className='font-semibold font-sans'>Rol:</h4>
-              {/* <select
-                className="border border-gray-300 rounded-md p-2 w-full mr-1"
-                name="rol"
-                defaultValue={inputValueSystem.rol}
-                onChange={handleInputChangeSystem}>
-                <option value='' >--Choose and option--</option>
-                <option value="Federico Daniel Rampi">Federico Daniel Rampi</option>
-              </select> */}
-              
+              <h4 className='font-sans font-semibold'>Nombre:</h4>
               <input
-                className="border border-gray-300 rounded-md p-2  w-full mr-1"
+                className="w-full p-2 mr-1 border border-gray-300 rounded-md"
                 name='rol'
                 value={inputValueSystem.rol}
                 onChange={handleInputChangeSystem}
@@ -135,11 +105,10 @@ function App() {
               />
             </label>
 
-
             <label className='flex flex-col p-2'>
-              <h4 className='font-semibold font-sans'>Tipo de Comunicación:</h4>
+              <h4 className='font-sans font-semibold'>Tipo de Comunicación:</h4>
               <select
-                className="border border-gray-300 rounded-md p-2 w-full mr-1"
+                className="w-full p-2 mr-1 border border-gray-300 rounded-md"
                 name="typeComunication"
                 defaultValue={inputValueSystem.typeComunication}
                 onChange={handleInputChangeSystem}>
@@ -147,16 +116,14 @@ function App() {
                 <option value="informar">Informar</option>
                 <option value="convocar">Convocar</option>
                 <option value="cancelar">Cancelar</option>
-                <option value="relevar">Relevar</option>
-                <option value="reconfirmar">Reconfirmar</option>
-                <option value="reprogramar">Reprogramar</option>
+                <option value="relevar">Publicitar</option>
               </select>
             </label>
 
             <label className='flex flex-col p-2'>
-              <h4 className='font-semibold font-sans'>Canal:</h4>
+              <h4 className='font-sans font-semibold'>Canal:</h4>
               <select
-                className="border border-gray-300 rounded-md p-2 w-full mr-1"
+                className="w-full p-2 mr-1 border border-gray-300 rounded-md"
                 name="channel"
                 defaultValue={inputValueSystem.channel}
                 onChange={handleInputChangeSystem}>
@@ -165,27 +132,27 @@ function App() {
                 <option value="Twitter">Twitter</option>
                 <option value="Whatsapp">Whatsapp</option>
                 <option value="Facebook">Facebook</option>
+                <option value="Discord">Discord</option>
                 <option value="E-mail">E-mail</option>
-                {/* <option value="IVR">IVR</option> */}
               </select>
             </label>
+
             {['Instagram', 'Twitter', 'Facebook'].includes(inputValueSystem.channel) &&
               <label className='flex flex-col p-2'>
-                <h4 className='font-semibold font-sans'>Nombre de la cuenta:</h4>
+                <h4 className='font-sans font-semibold'>Nombre de la cuenta: (optativo)</h4>
                 <input
-                  className="border border-gray-300 rounded-md p-2  w-full mr-1"
+                  className="w-full p-2 mr-1 border border-gray-300 rounded-md"
                   name='countUser'
                   value={inputValueSystem.countUser}
                   onChange={handleInputChangeSystem}
                   type="text"
-
                 />
               </label>
             }
             <label className='flex flex-col p-2'>
-              <h4 className='font-semibold font-sans'>Nombre del Evento:</h4>
+              <h4 className='font-sans font-semibold'>Nombre del Evento:</h4>
               <input
-                className="border border-gray-300 rounded-md p-2  w-full mr-1"
+                className="w-full p-2 mr-1 border border-gray-300 rounded-md"
                 name='eventName'
                 value={inputValueSystem.eventName}
                 onChange={handleInputChangeSystem}
@@ -195,9 +162,9 @@ function App() {
             </label>
 
             <label className='flex flex-col p-2'>
-              <h4 className='font-semibold font-sans'>Caracteristicas de la Audiencia:</h4>
+              <h4 className='font-sans font-semibold'>Caracteristicas de la Audiencia:</h4>
               <input
-                className="border border-gray-300 rounded-md p-2  w-full mr-1"
+                className="w-full p-2 mr-1 border border-gray-300 rounded-md"
                 name='audience'
                 value={inputValueSystem.audience}
                 onChange={handleInputChangeSystem}
@@ -208,9 +175,9 @@ function App() {
 
 
             <label className='flex flex-col p-2'>
-              <h4 className='font-semibold font-sans'>Tono y Estilo:</h4>
+              <h4 className='font-sans font-semibold'>Tono y Estilo:</h4>
               <input
-                className="border border-gray-300 rounded-md p-2  w-full mr-1"
+                className="w-full p-2 mr-1 border border-gray-300 rounded-md"
                 name='toneAndStyle'
                 value={inputValueSystem.toneAndStyle}
                 onChange={handleInputChangeSystem}
@@ -219,23 +186,22 @@ function App() {
               />
             </label>
 
-
-            <label className='flex flex-col  p-2'>
-              <h4 className='font-semibold font-sans'>Cantidad de Palabras o Caracteres:</h4>
+            <label className='flex flex-col p-2'>
+              <h4 className='font-sans font-semibold'>Cantidad de Palabras o Caracteres:</h4>
               <div className='flex flex-row justify-between m-2'>
                 <div className='mx-2'>
                   <input
                     name='quantityWordOrCharacter'
                     min={0}
                     max={300}
-                    className='border border-gray-300 rounded-md p-2  w-full mr-1'
+                    className='w-full p-2 mr-1 border border-gray-300 rounded-md'
                     type="number"
                     onChange={handleInputChangeSystem} />
                 </div>
 
                 <div className='mx-2'>
                   <select
-                    className='border border-gray-300 rounded-md p-2  w-full mr-1'
+                    className='w-full p-2 mr-1 border border-gray-300 rounded-md'
                     name="wordOrCharacter"
                     defaultValue={inputValueSystem.wordOrCharacter}
                     onChange={handleInputChangeSystem}>
@@ -248,53 +214,52 @@ function App() {
             </label>
 
             <label className='flex flex-col p-2'>
-              <h4 className='font-semibold font-sans'>Cantidad de respuestas:</h4>
+              <h4 className='font-sans font-semibold'>Cantidad de respuestas:</h4>
               <div className='flex flex-row justify-around m-2'>
                 <label className='flex flex-row'>
-                  <span className='font-bold text-lg'>1</span>
+                  <span className='text-lg font-bold'>1</span>
                 </label>
                 <input
                   name='quantityAnswer'
                   value={1}
                   onChange={() => handleInputRadioParams(1)}
-                  className='border border-gray-300 rounded-md w-20 cursor-pointer'
+                  className='w-20 border border-gray-300 rounded-md cursor-pointer'
                   type="radio"
                   checked={inputValueParams.quantityAnswer === 1}
                 />
 
                 <label className='flex flex-row'>
-                  <span className='font-bold text-lg'>2</span>
+                  <span className='text-lg font-bold'>2</span>
                 </label>
                 <input
                   name='quantityAnswer'
                   value={2}
                   onChange={() => handleInputRadioParams(2)}
-                  className='border border-gray-300 rounded-md w-20 cursor-pointer'
+                  className='w-20 border border-gray-300 rounded-md cursor-pointer'
                   type="radio"
                   checked={inputValueParams.quantityAnswer === 2}
                 />
 
                 <label className='flex flex-row'>
-                  <span className='font-bold text-lg'>3</span>
+                  <span className='text-lg font-bold'>3</span>
                 </label>
                 <input
                   name='quantityAnswer'
                   value={3}
                   onChange={() => handleInputRadioParams(3)}
-                  className='border border-gray-300 rounded-md w-20 cursor-pointer'
+                  className='w-20 border border-gray-300 rounded-md cursor-pointer'
                   type="radio"
                   checked={inputValueParams.quantityAnswer === 3}
                 />
               </div>
             </label>
 
-
             <label className='flex flex-col p-2'>
-              <h4 className='font-semibold font-sans'>Mensaje:</h4>
+              <h4 className='font-sans font-semibold'>Mensaje:</h4>
               <textarea
                 name='message'
                 type="text"
-                className="border border-gray-300 rounded-md p-2  w-full mr-1"
+                className="w-full p-2 mr-1 border border-gray-300 rounded-md"
                 autoComplete='off'
                 value={inputValueSystem.message}
                 onChange={handleInputChangeSystem}
@@ -304,24 +269,20 @@ function App() {
               />
             </label>
 
-            <div className='flex flex-row justify-center'>
-              <button
-                type="submit"
-                className={`bg-blue-700 text-white rounded-md px-4 py-2 m-6`}>
-                Setear Parametros y Generar
-              </button>
-
-
-            </div>
-
+            <button
+              type="submit"
+              className={`bg-blue-500 hover:bg-blue-800 transition-all duration-300 text-white rounded-md px-4 py-2 m-6`}>
+              Setear Parametros y Generar
+            </button>
           </form>
 
         </div>
+
+
         {/* mensaje con GPT */}
         <Chat
           isChatGPTWriting={isChatGPTWriting}
           setIsChatGPTWriting={setIsChatGPTWriting} />
-
       </div>
 
 

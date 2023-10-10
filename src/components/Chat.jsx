@@ -1,13 +1,10 @@
-import  { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useMessageContext } from '../hooks/useMessageContext';
 
 
 const Chat = ({ isChatGPTWriting, setIsChatGPTWriting }) => {
     const [inputValue, setInputValue] = useState('');
-
-
     const chatContainerRef = useRef(null);
-
     const { messages, setMessages } = useMessageContext();
 
     useEffect(() => {
@@ -29,7 +26,6 @@ const Chat = ({ isChatGPTWriting, setIsChatGPTWriting }) => {
                 role: 'user',
                 content: inputValue,
             };
-            console.log("messages",messages)
             if (messages) {
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             } else {
@@ -42,29 +38,29 @@ const Chat = ({ isChatGPTWriting, setIsChatGPTWriting }) => {
 
 
     return (
-        <div className=' flex-1 flex h-full justify-center'>
-            <div className="w-[700px] shadow-sm border flex flex-col my-2 ">
-
-                {/* <h3 className="px-4 py-2 font-semifbold border-b border-gray-900  bg-gray-200  font-bold">
-                Chat con GPT
-            </h3> */}
-
+        <div className='flex justify-center flex-1 h-full '>
+            <div className="w-[700px] shadow-sm shadow-black border flex flex-col my-2 rounded-sm overflow-hidden">
+                {/* <h3 className="px-4 py-2 font-bold bg-gray-200 border-b border-gray-900 font-semifbold">
+                    Chat con GPT
+                </h3> */}
+                
+                {/* Chat message */}
                 <div
                     id={`scroll-chat`}
-                    className=" flex-grow overflow-auto p-2 bg-white" ref={chatContainerRef}>
+                    className="flex-grow h-screen p-2 overflow-auto bg-white over" ref={chatContainerRef}>
                     {messages && messages.map((message, index) => (
                         message.role === 'system' ? null : (
                             message.role === 'user' ? (
                                 message.content === 'generar' ? <></> :
-                                    <div key={index} className="flex justify-start mb-4 mr-20">
-                                        <div className="bg-blue-500 text-white rounded-lg p-2">
-                                            <span className="text-[12px]  text-gray-900">Me</span>
-                                            <p className="">{message.content}</p>
+                                    <div key={index} className="flex justify-start mb-4 mr-32">
+                                        <div className="p-2 pt-1 text-white bg-blue-500 rounded-lg">
+                                            <span className="text-[14px] font-bold text-black">Me</span>
+                                            <p>{message.content}</p>
                                         </div>
                                     </div>) :
-                                <div key={index} className="flex justify-end mb-4 ml-20">
-                                    <div className="bg-gray-400 text-white rounded-lg p-2 whitespace-pre-line">
-                                        <span className="text-[12px]  text-gray-900">GPT</span>
+                                <div key={index} className="flex justify-end mb-4 ml-32">
+                                    <div className="p-2 pt-1 text-white whitespace-pre-line bg-gray-500 rounded-lg">
+                                        <span className="text-[14px] font-bold text-black">GPT</span>
                                         <p className="">{message.content}</p>
                                     </div>
                                 </div>
@@ -73,8 +69,8 @@ const Chat = ({ isChatGPTWriting, setIsChatGPTWriting }) => {
 
                     {messages && messages.length > 0 && messages[messages.length - 1].role === 'user' && isChatGPTWriting && (
                         <div key='typing' className="flex justify-end mb-4">
-                            <div className="bg-gray-400 text-white rounded-lg p-2">
-                                <span className="text-[12px]  text-gray-900">GPT</span>
+                            <div className="p-2 text-white bg-gray-400 rounded-lg">
+                                <span className="text-[14px] font-bold text-black">GPT</span>
                                 <p className="">Escribiendo ...</p>
                             </div>
                         </div>
@@ -82,23 +78,22 @@ const Chat = ({ isChatGPTWriting, setIsChatGPTWriting }) => {
                 </div>
 
                 <form
-                    className={`${!messages ? 'hidden' : 'flex'} p-3 rounded-t-sm bg-slate-300 `}
+                    className={`${!messages ? 'hidden' : 'flex'} p-3 rounded-t-sm bg-slate-300  border-t`}
                     onSubmit={handleSubmit}>
                     <input
                         type="text"
                         value={inputValue}
                         onChange={handleInputChange}
-                        className="border border-gray-300 rounded-md p-2 mt-2 w-full mr-1"
+                        className="w-full p-2 mt-2 mr-1 border border-gray-300 rounded-md"
                         placeholder="Escribe un mensaje..."
                     />
                     <button
                         type="submit"
-                        className="bg-blue-900 text-white rounded-md px-4 py-2 mt-2"
-                    >
+                        className="px-4 py-2 mt-2 text-white transition-all duration-300 bg-blue-500 rounded-md hover:bg-blue-700">
                         Enviar
                     </button>
                 </form>
-                
+
             </div>
         </div>
     )

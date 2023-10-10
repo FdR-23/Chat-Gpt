@@ -8,11 +8,11 @@ html {
 }
 
 body {
-  @apply max-w-screen-xl h-screen m-auto flex flex-col bg-[#f5f8fa] scroll-smooth
+  @apply max-w-screen-xl flex flex-col m-auto  bg-[#f5f8fa] scroll-smooth
 }
 
 #root {
-  @apply min-h-screen box-border
+  @apply max-h-screen box-border
 }
 
 body::-webkit-scrollbar,
@@ -32,4 +32,3 @@ form::-webkit-scrollbar-thumb,
   /* Establecer el color del "pulgador" del scroll */
   background-color: #888888;
 }
-

@@ -14,7 +14,7 @@ const Request = async (messages, inputValueParams) => {
         };
         const response = await axios.post('https://api.openai.com/v1/chat/completions', params, {
             headers: {
-                'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY_MAX_NEW}`,
+                'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY_NEW}`,
                 'content-type': "application/json",
             },
         }).then(response => response.data)
