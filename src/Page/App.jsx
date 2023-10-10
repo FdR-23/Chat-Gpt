@@ -133,6 +133,7 @@ function App() {
                 <option value="Whatsapp">Whatsapp</option>
                 <option value="Facebook">Facebook</option>
                 <option value="Discord">Discord</option>
+                <option value="LinkedIn">LinkedIn</option>
                 <option value="E-mail">E-mail</option>
               </select>
             </label>
