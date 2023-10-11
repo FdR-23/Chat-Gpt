@@ -194,7 +194,7 @@ function App() {
                   <input
                     name='quantityWordOrCharacter'
                     min={0}
-                    max={300}
+                    max={150}
                     className='w-full p-2 mr-1 border border-gray-300 rounded-md'
                     type="number"
                     onChange={handleInputChangeSystem} />
