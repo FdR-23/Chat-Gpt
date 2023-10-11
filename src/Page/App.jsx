@@ -36,7 +36,7 @@ function App() {
           }
         })
     }
-  }, [isUserMessage])
+  }, [inputValueParams, isUserMessage, messages, setMessages])
 
   // para parametros de chatgpt
   const handleInputRadioParams = (e) => {
@@ -78,13 +78,13 @@ function App() {
 
 
   return (
-    <div className="flex flex-col items-center w-full h-screen p-2 pb-0 overflow-hidden bg-gray-100">
+    <div className="flex flex-col items-center w-full h-screen overflow-hidden bg-gray-100">
 
-      <div className="flex justify-between w-full h-full overflow-hidden border-black rounded-sm shadow-md border-x shadow-black">
+      <div className="flex justify-between w-full h-full my-4 overflow-hidden border border-black rounded-md shadow-sm shadow-gray-700">
 
         {/* mensaje con principal del sistema*/}
 
-        <div className="flex flex-col w-[350px]  rounded-sm box-border bg-indigo-300/80">
+        <div className="flex flex-col w-[350px]  rounded-sm box-border bg-indigo-300/80 border-r-2 border-gray-900">
           <h3 className="px-4 py-2 text-lg font-bold tracking-wide text-center text-white bg-gray-700 ">
             Promp para el sistema
           </h3>

@@ -1,7 +1,7 @@
 import  { useState } from 'react'
-import { messageContext } from './hooks/useMessageContext';
-import { messageSystemContext } from './hooks/useMessageSystemContext';
-import { valueParamsContext } from './hooks/useValueParamsContext';
+import { messageContext } from '../hooks/useMessageContext';
+import { messageSystemContext } from '../hooks/useMessageSystemContext';
+import { valueParamsContext } from '../hooks/useValueParamsContext';
 
 const MessageProvider = ({ children }) => {
     const [inputValueParams, setInputValueParams] = useState({
